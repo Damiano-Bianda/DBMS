@@ -23,7 +23,7 @@ SELECT g.nome, XMLElement("ritirati", XMLAgg(
                  XMLAttributes(s.buche_completate AS "buche_completate"),
                  deref(s.giocatore).nome)
                order by s.buche_completate DESC)
-             )  ritirati
+             ).getstringval()  ritirati
 from gare g, table(g.punteggi) s 
 where s.buche_completate<9 --ritirato
 group by g.nome

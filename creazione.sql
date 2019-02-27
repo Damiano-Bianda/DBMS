@@ -309,7 +309,7 @@ BEGIN
       SELECT ref(g) INTO giocatore_locale FROM giocatori g WHERE g.numeroTessera = numeroTessera_locale;
     EXCEPTION
       WHEN NO_DATA_FOUND THEN
-        DBMS_OUTPUT.PUT_LINE('Il giocatore ' || numeroTessera_locale || ' non esiste, il suo punteggio non può essere inserito');
+        DBMS_OUTPUT.PUT_LINE('Il giocatore ' || numeroTessera_locale || ' non esiste, il suo punteggio non puo essere inserito');
         RETURN;
     END;
     
@@ -317,7 +317,7 @@ BEGIN
     
     -- se il giocatore trovato non appartiene ad un circolo genero un exception
     IF circolo_locale IS NULL THEN
-        DBMS_OUTPUT.PUT_LINE('Il giocatore ' || numeroTessera_locale || ' non appartiene ad un circolo, il suo punteggio non può essere inserito');
+        DBMS_OUTPUT.PUT_LINE('Il giocatore ' || numeroTessera_locale || ' non appartiene ad un circolo, il suo punteggio non puo essere inserito');
         RETURN;
     END IF;
         
