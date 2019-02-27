@@ -200,29 +200,6 @@ CREATE TYPE punteggi_set AS TABLE OF punteggio_t;
 /
 ALTER TYPE gara_t ADD ATTRIBUTE punteggi punteggi_set CASCADE;
 /
--- funzioni oggetti
-
-CREATE OR REPLACE TYPE BODY gara_t AS
-  MEMBER FUNCTION parTotale RETURN INTEGER IS
-  par_totale NUMBER;
-  BEGIN
-    SELECT  xtab.par_tot INTO par_totale 
-    FROM gare g, XMLTable(
-    '<par>{sum($buche//buca/@par)}</par>'
-    PASSING g.buche as "buche"
-    COLUMNS
-            par_tot INTEGER PATH    '/par'
-    ) xtab
-    where nome=self.nome;
-    RETURN par_totale;
-  END;
-  MEMBER FUNCTION classifica RETURN XMLType IS
-  BEGIN
-    RETURN null;
-  END;
-END;
-/
-
 -- creazione tabelle
 CREATE TABLE gare OF gara_t (
         nome primary key,
@@ -247,6 +224,29 @@ CREATE TABLE giocatori OF giocatore_t(
     CONSTRAINT eta_valida CHECK (eta BETWEEN 0 AND 150),
     CONSTRAINT handicap_valido CHECK (handicap BETWEEN 0 AND 36)
 );
+
+-- funzioni oggetti
+
+CREATE OR REPLACE TYPE BODY gara_t AS
+  MEMBER FUNCTION parTotale RETURN INTEGER IS
+  par_totale NUMBER;
+  BEGIN
+    SELECT  xtab.par_tot INTO par_totale 
+    FROM gare g, XMLTable(
+    '<par>{sum($buche//buca/@par)}</par>'
+    PASSING g.buche as "buche"
+    COLUMNS
+            par_tot INTEGER PATH    '/par'
+    ) xtab
+    where nome=self.nome;
+    RETURN par_totale;
+  END;
+  MEMBER FUNCTION classifica RETURN XMLType IS
+  BEGIN
+    RETURN null;
+  END;
+END;
+/
 
 -- Valida in documento in ingresso con lo schema e lo inserisce nella tabella
 CREATE OR REPLACE PROCEDURE valida_gara (doc IN VARCHAR2)
@@ -313,17 +313,21 @@ BEGIN
         RETURN;
     END;
     
+    SELECT g.circolo INTO circolo_locale FROM giocatori g WHERE g.numeroTessera = numeroTessera_locale;
+    
     -- se il giocatore trovato non appartiene ad un circolo genero un exception
     IF circolo_locale IS NULL THEN
         DBMS_OUTPUT.PUT_LINE('Il giocatore ' || numeroTessera_locale || ' non appartiene ad un circolo, il suo punteggio non può essere inserito');
         RETURN;
     END IF;
-    
+        
     SELECT nome_gara INTO nome_gara_locale FROM XMLTable('.' PASSING validated_doc COLUMNS nome_gara  VARCHAR2(50) PATH '//name') xtab2;    
         
     SELECT punteggi INTO nest FROM gare WHERE nome = nome_gara_locale;
     
     nest.extend;
+    
+        
     
     SELECT punteggio_t(giocatore_locale, xtab.punteggio, xtab.buche_completate) INTO punt
             FROM XMLTABLE(
