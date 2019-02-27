@@ -1,4 +1,16 @@
 --B.1) Creare il calendario delle gare di un circolo in un anno. Il calendario deve essere un documento XML.
+SELECT XMLELEMENT("calendario",
+            XMLATTRIBUTES(c.nome AS "circolo"),
+            XMLAgg(
+                XMLElement("gara",
+                    XMLATTRIBUTES(value(g).data AS data, value(g).sponsor AS sponsor),
+                    value(g).nome
+                    )
+            )
+        )
+FROM circoli c, table(c.gare) g 
+where c.nome='Golf Club Milano' AND extract(YEAR from value(g).data) = 2009
+group by c.nome;
 
 --B.2) Determinare il circolo a cui è iscritto un dato golfista
 SELECT DEREF(circolo).nome from giocatori where numerotessera='MC1001';
