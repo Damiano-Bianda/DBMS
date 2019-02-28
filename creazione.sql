@@ -283,6 +283,9 @@ BEGIN
             categorie XMLTYPE       PATH    '/result/category_list',
             privata numeric(1)      PATH    '/result/reserved'
             ) xtab;
+            
+            
+
 END;
 
 CREATE OR REPLACE PROCEDURE valida_punteggio (doc IN VARCHAR2)
@@ -292,6 +295,7 @@ AS
     circolo_locale giocatori.circolo%TYPE;
     giocatore_locale    REF giocatore_t;
     nome_gara_locale    VARCHAR2(50);
+    privato_locale      gara.privata%TYPE;
     
     nest           gare.punteggi%TYPE;
     punt           punteggio_t;
@@ -326,9 +330,6 @@ BEGIN
     SELECT punteggi INTO nest FROM gare WHERE nome = nome_gara_locale;
     
     nest.extend;
-    
-        
-    
     SELECT punteggio_t(giocatore_locale, xtab.punteggio, xtab.buche_completate) INTO punt
             FROM XMLTABLE(
                 'let $jolly := if (exists($d//jolly)) then data($d//jolly) else -1
@@ -346,6 +347,5 @@ BEGIN
     nest(nest.last) := punt;
     
     UPDATE gare g SET punteggi = nest WHERE g.nome = nome_gara_locale;
-    
     
 END;
