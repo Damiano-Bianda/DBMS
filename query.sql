@@ -6,6 +6,7 @@ SELECT XMLELEMENT("calendario",
                     XMLATTRIBUTES(value(g).data AS data, value(g).sponsor AS sponsor),
                     value(g).nome
                     )
+                    order by value(g).data
             )
         ).getstringval()
 FROM circoli c, table(c.gare) g 
@@ -46,19 +47,19 @@ SELECT XMLQUERY('
                         )else(
                             $doc//classifica/giocatore[@handicap>$c/@from and @handicap<$c/@to]
                         )
-    let $giocatori := $tgiocatori[position()<=$nprizes]                    
+    let $giocatori := $tgiocatori                  
         
     return 
         <categoria tipo="{$c/@type}" posti="{$nprizes}">{
-            for $g in $giocatori
+            (for $g in $giocatori
             let $ord := $g/@punteggio 
-            order by $ord descending
-            return $g
+            order by $ord ascending
+            return $g)[position()<=$nprizes]
         }</categoria>
     }</classifica>
     '
     PASSING itab1.doc AS "doc", itab2.categorie AS "cat"
-    RETURNING CONTENT).getstringval() classifica
+    RETURNING CONTENT) classifica
 FROM ( SELECT XMLELEMENT(
                 "classifica", XMLAGG(XMLELEMENT(
                     "giocatore",
