@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+  <xs:element name="classifica">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="categoria" minOccurs="0" maxOccurs="7">
+        <xs:complexType>
+        <xs:sequence>
+        <xs:element name="giocatore" type="t_giocatore" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+             <xs:attribute name="tipo" type="t_categorie" use="required"/>
+            <xs:attribute name="posti" type="xs:integer" use="required"/>
+        </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="torneo" type="xs:string" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <!-- definizioni categorie-->
+  
+  
+  
+  <xs:complexType name="t_giocatore">
+      <xs:simpleContent>
+      <xs:extension base="xs:string">
+            <xs:attribute name="numero_tessera" type="xs:string" use="required"/>
+              <xs:attribute name="sotto_par" type="xs:boolean" use="required"/>
+              <xs:attribute name="punteggio" type="xs:integer" use="required"/>
+              <xs:attribute name="sesso" type="xs:string" use="required"/>
+              <xs:attribute name="eta" type="xs:integer" use="required"/>
+              <xs:attribute name="handicap" type="xs:integer" use="required"/>
+      </xs:extension>
+      </xs:simpleContent>
+  </xs:complexType>
+  <xs:simpleType name="t_categorie">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="First"/>
+			<xs:enumeration value="Second"/>
+			<xs:enumeration value="Third"/>
+			<xs:enumeration value="Forth"/>
+			<xs:enumeration value="Fifth"/>
+			<xs:enumeration value="Lady"/>
+			<xs:enumeration value="Over"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

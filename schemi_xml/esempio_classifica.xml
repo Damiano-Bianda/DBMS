@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<classifica torneo="Coppa del Presidente">
+  <categoria tipo="First" posti="3">
+    <giocatore numero_tessera="FC1003" sotto_par="false" punteggio="38" sesso="f" eta="43" handicap="8">Stacy Lewis</giocatore>
+    <giocatore numero_tessera="FC1001" sotto_par="true" punteggio="34" sesso="f" eta="22" handicap="4">Annika Sorenstam</giocatore>
+    <giocatore numero_tessera="MC1003" sotto_par="true" punteggio="33" sesso="m" eta="53" handicap="2">Rory Mcllroy</giocatore>
+  </categoria>
+  <categoria tipo="Second" posti="3">
+    <giocatore numero_tessera="MC1002" sotto_par="false" punteggio="39" sesso="m" eta="42" handicap="20">Sergio Garcia Fernandez</giocatore>
+    <giocatore numero_tessera="FC1002" sotto_par="true" punteggio="32" sesso="f" eta="36" handicap="17">Ariya Jutanugarn</giocatore>
+    <giocatore numero_tessera="MC1004" sotto_par="true" punteggio="31" sesso="m" eta="23" handicap="27">Francesco Molinari</giocatore>
+  </categoria>
+  <categoria tipo="Lady" posti="1">
+    <giocatore numero_tessera="FC1001" sotto_par="true" punteggio="34" sesso="f" eta="22" handicap="4">Annika Sorenstam</giocatore>
+  </categoria>
+  <categoria tipo="Over" posti="1">
+    <giocatore numero_tessera="MC1003" sotto_par="true" punteggio="33" sesso="m" eta="53" handicap="2">Rory Mcllroy</giocatore>
+  </categoria>
+</classifica>
