@@ -160,8 +160,7 @@ CREATE TYPE gara_t AS OBJECT(
     categorie   XMLTYPE,
     privata     NUMBER(1),
      
-    MEMBER FUNCTION parTotale RETURN INTEGER,
-    MEMBER FUNCTION classifica RETURN XMLTYPE
+    MEMBER FUNCTION parTotale RETURN INTEGER
 );
 /
 CREATE TYPE telefoni_set AS TABLE OF VARCHAR(15);
@@ -241,11 +240,27 @@ CREATE OR REPLACE TYPE BODY gara_t AS
     where nome=self.nome;
     RETURN par_totale;
   END;
+END;
+
+CREATE OR REPLACE TYPE BODY circolo_t AS
+  MEMBER FUNCTION numeroSoci RETURN INTEGER IS
+  numero_soci NUMBER;
+  BEGIN
+    
+    SELECT count(*) INTO numero_soci
+    FROM giocatore g
+    WHERE deref(g.circolo).nome=self.nome;
+    
+    
+    RETURN numero_soci;
+
+  END;
   MEMBER FUNCTION classifica RETURN XMLType IS
   BEGIN
     RETURN null;
   END;
 END;
+
 /
 
 -- Valida in documento in ingresso con lo schema e lo inserisce nella tabella
