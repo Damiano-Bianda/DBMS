@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<golfCompetition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="GolfCompetition.xsd">
+  <name>Coppa del presidente</name>
+  <date>2009-12-25</date>
+  <sponsor>Lavazza S.p.A</sponsor>
+  <buche>
+    <buca par="4"/>
+    <buca par="5"/>
+    <buca par="3"/>
+    <buca par="4"/>
+    <buca par="4"/>
+    <buca par="5"/>
+    <buca par="3"/>
+    <buca par="5"/>
+    <buca par="3"/>
+  </buche>
+  <category numPrize="3" from="0" to="15" type="First"/>
+  <category numPrize="3" from="16" to="36" type="Second"/>
+  <category numPrize="1" type="Lady"/>
+  <category numPrize="1" type="Over" age="40"/>
+</golfCompetition>

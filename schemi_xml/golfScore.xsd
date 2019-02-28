@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+  <xs:element name="golfscore">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="name">
+          <xs:complexType>
+            <xs:simpleContent>
+              <xs:extension base="xs:string">
+                <xs:attribute name="id" type="xs:string"/>
+                <xs:attribute name="par" type="xs:integer"/>
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="date" type="xs:date"/>
+        <xs:element name="player" type="xs:string"/>
+        <xs:element name="results">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="hole" type="holeT" minOccurs="0" maxOccurs="9"/>
+              <xs:choice>
+                <xs:element name="withdraw" minOccurs="0">
+                  <xs:complexType>
+                                                </xs:complexType>
+                </xs:element>
+                <xs:element name="jolly" type="holeNumberT" minOccurs="0"/>
+              </xs:choice>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="holeT">
+    <xs:simpleContent>
+      <xs:extension base="holeResultT">
+        <xs:attribute name="number" type="holeNumberT"/>
+        <xs:attribute name="par" type="holeNumberT"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:simpleType name="holeNumberT">
+    <xs:restriction base="xs:integer">
+      <xs:minInclusive value="1"/>
+      <xs:maxInclusive value="9"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="holeResultT">
+    <xs:restriction base="xs:integer">
+      <xs:minInclusive value="1"/>
+      <xs:maxInclusive value="10"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>
