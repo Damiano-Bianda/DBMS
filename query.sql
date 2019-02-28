@@ -21,7 +21,7 @@ SELECT DISTINCT VALUE(p).giocatore.numeroTessera FROM gare g, TABLE(g.punteggi) 
 MINUS
 SELECT VALUE(p).giocatore.numeroTessera 
 FROM gare g, TABLE(g.punteggi) p 
-WHERE privata = 0
+WHERE privata = 0;
 
 --B.4) Per ogni gara, determinare i golfisti ritirati. Ordinare la lista in base al numero di buche che sono state completate
 SELECT g.nome, XMLElement("ritirati", XMLAgg(
@@ -32,7 +32,7 @@ SELECT g.nome, XMLElement("ritirati", XMLAgg(
              ).getstringval()  ritirati
 from gare g, table(g.punteggi) s 
 where s.buche_completate<9 --ritirato
-group by g.nome
+group by g.nome;
 
 --b.5)
 
@@ -40,15 +40,13 @@ SELECT XMLQUERY('
 <classifica>{
     for $c in $cat/category_list/category
     let $nprizes := $c/@numPrize
-    let $tgiocatori := if($c/@type = "Over") then(
+    let $giocatori := if($c/@type = "Over") then(
                             $doc//classifica/giocatore[@eta>=$c/@age]
                         )else if($c/@type = "Lady") then(
                             $doc//classifica/giocatore[@sesso="f"]
                         )else(
-                            $doc//classifica/giocatore[@handicap>$c/@from and @handicap<$c/@to]
+                            $doc//classifica/giocatore[@handicap>=$c/@from and @handicap<=$c/@to]
                         )
-    let $giocatori := $tgiocatori                  
-        
     return 
         <categoria tipo="{$c/@type}" posti="{$nprizes}">{
             (for $g in $giocatori
@@ -59,8 +57,8 @@ SELECT XMLQUERY('
     }</classifica>
     '
     PASSING itab1.doc AS "doc", itab2.categorie AS "cat"
-    RETURNING CONTENT) classifica
-FROM ( SELECT XMLELEMENT(
+    RETURNING CONTENT)  classifica
+FROM ( SELECT nome, XMLELEMENT(
                 "classifica", XMLAGG(XMLELEMENT(
                     "giocatore",
                     XMLATTRIBUTES(
@@ -79,8 +77,5 @@ FROM ( SELECT XMLELEMENT(
         FROM  gare g, TABLE ( g.punteggi ) p
         WHERE nome = 'Coppa del presidente' AND value(p).buche_completate = 9
         GROUP BY nome
-    ) itab1,
-    ( SELECT g2.categorie
-        FROM gare g2
-        WHERE g2.nome = 'Coppa del presidente'
-    ) itab2
+    ) itab1, gare itab2
+where itab2.nome = itab1.nome

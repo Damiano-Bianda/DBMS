@@ -5,18 +5,18 @@ drop type giocatore_t force;
 drop type punteggi_set force;
 drop type punteggio_t force;
 drop type telefoni_set force;
-
+/
 drop table gare force;
 drop table circoli force;
 drop table giocatori force;
 
 -- schemi
-
+/
 BEGIN
     dbms_xmlschema.deleteSchema(schemaURL  => 'GolfCompetition.xsd');
     dbms_xmlschema.deleteSchema(schemaURL  => 'GolfScore.xsd');    
 END;
-
+/
 BEGIN   
    dbms_xmlschema.registerSchema(schemaURL   => 'GolfCompetition.xsd', 
                                  schemaDoc   => '<?xml version="1.0" encoding="UTF-8"?>
@@ -149,7 +149,7 @@ dbms_xmlschema.registerSchema(schemaURL   => 'GolfScore.xsd',
                                                 </xs:simpleType>
                                                 </xs:schema>'); 
 END; 
-
+/
 -- creazione tipi
 
 CREATE TYPE gara_t AS OBJECT(
@@ -199,6 +199,7 @@ CREATE TYPE punteggi_set AS TABLE OF punteggio_t;
 /
 ALTER TYPE gara_t ADD ATTRIBUTE punteggi punteggi_set CASCADE;
 /
+
 -- creazione tabelle
 CREATE TABLE gare OF gara_t (
         nome primary key,
@@ -223,7 +224,7 @@ CREATE TABLE giocatori OF giocatore_t(
     CONSTRAINT eta_valida CHECK (eta BETWEEN 0 AND 150),
     CONSTRAINT handicap_valido CHECK (handicap BETWEEN 0 AND 36)
 );
-
+/
 -- funzioni oggetti
 
 CREATE OR REPLACE TYPE BODY gara_t AS
@@ -242,23 +243,21 @@ CREATE OR REPLACE TYPE BODY gara_t AS
   END;
 END;
 
+/
 CREATE OR REPLACE TYPE BODY circolo_t AS
   MEMBER FUNCTION numeroSoci RETURN INTEGER IS
   numero_soci NUMBER;
   BEGIN
     
     SELECT count(*) INTO numero_soci
-    FROM giocatore g
+    FROM giocatori g
     WHERE deref(g.circolo).nome=self.nome;
     
     
     RETURN numero_soci;
 
   END;
-  MEMBER FUNCTION classifica RETURN XMLType IS
-  BEGIN
-    RETURN null;
-  END;
+ 
 END;
 
 /
@@ -302,7 +301,7 @@ BEGIN
             
 
 END;
-
+/
 CREATE OR REPLACE PROCEDURE valida_punteggio (doc IN VARCHAR2)
 AS
     validated_doc XMLType;
@@ -310,7 +309,6 @@ AS
     circolo_locale giocatori.circolo%TYPE;
     giocatore_locale    REF giocatore_t;
     nome_gara_locale    VARCHAR2(50);
-    privato_locale      gara.privata%TYPE;
     
     nest           gare.punteggi%TYPE;
     punt           punteggio_t;
